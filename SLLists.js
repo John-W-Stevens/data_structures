@@ -8,13 +8,14 @@
     // c. addToFront(value)    -> Returns this, creates a new node and adds to front of list
     // d. removeFromFront()    -> Removes this.head and returns it's value
     // e. removeFromBack()     -> Removes the last node in the list and returns it's value
-    // f. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list
-    // g. editAt(idx)          -> Returns the node at the idx position in the list
-    // h. hasCycle()           -> Returns boolean based on whether or not a cycle exists
-    // i. printList()          -> Returns this, console.logs node.value for all nodes in list
-    // j. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
-    // k. getLength()          -> Returns the number of elements in instance.
-    // j. help()               -> Prints these comments to the console
+    // f. removeAt(idx)        -> Returns this, removes node at the specified index position
+    // g. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list
+    // h. editAt(idx)          -> Returns the node at the idx position in the list
+    // i. hasCycle()           -> Returns boolean based on whether or not a cycle exists
+    // j. printList()          -> Returns this, console.logs node.value for all nodes in list
+    // k. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
+    // l. getLength()          -> Returns the number of elements in instance.
+    // m. help()               -> Prints these comments to the console
 
 class SLNode {
     constructor(value){
@@ -30,18 +31,22 @@ class SLList {
     }
 
     help(){
+        console.log()
         console.log("SLList class has the following methods:")
         console.log("    a. isEmpty()            -> Returns boolean based on whether or not SLList is empty.")
         console.log("    b. addToBack(value)     -> Returns this, creates a new node and adds to back of list.")
         console.log("    c. addToFront(value)    -> Returns this, creates a new node and adds to front of list.")
         console.log("    d. removeFromFront()    -> Removes this.head and returns it's value.")
         console.log("    e. removeFromBack()     -> Removes the last node in the list and returns it's value.")
-        console.log("    f. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list.")
-        console.log("    g. editAt(idx)          -> Returns the node at the idx position in the list.")
-        console.log("    h. hasCycle()           -> Returns boolean based on whether or not a cycle exists.")
-        console.log("    i. printList()          -> Returns this, console.logs node.value for all nodes in list.")
-        console.log("    j. getLength()          -> Returns the number of elements in instance.")
-        console.log("    k. forEach(aFunction)   -> Input is a function, applies input function to each element in instance.")
+        console.log("    f. removeAt(idx)        -> Returns this, removes node at the specified index position.")
+        console.log("    g. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list.")
+        console.log("    h. editAt(idx)          -> Returns the node at the idx position in the list.")
+        console.log("    i. hasCycle()           -> Returns boolean based on whether or not a cycle exists. Prints cycle length, start index, & end index")
+        console.log("    j. printList()          -> Returns this, console.logs node.value for all nodes in list.")
+        console.log("    k. getLength()          -> Returns the number of elements in instance.")
+        console.log("    l. forEach(aFunction)   -> Input is a function, applies input function to each element in instance.")
+        console.log("NOTE: For the purposes of accessing entries by index position, this class follows standard JavaScript practice and begins indexing at 0.")
+        console.log()
     }
 
     isEmpty(){ return this.head === null; }
@@ -102,6 +107,40 @@ class SLList {
         }
     }
 
+    removeAt(idx){
+        if (this.isEmpty()){
+            console.log("The list is empty.")
+            return this;
+        }
+        else if (idx === 0){
+            return this.removeFromFront();
+
+        }
+        else if (this.length - 1 < idx){
+            console.log("No entry exists at this index position.")
+            return this;
+        }
+        let count = 0;
+        let previous = this.head;
+        let runner = this.head;
+        while(count < idx){
+            previous = runner;
+            runner = runner.next;
+            count += 1;
+        }
+        this.length -= 1;
+        if (runner.next === null){
+            previous.next = null;
+            return runner;
+        }
+        else{
+            previous.next = runner.next;
+            runner.next = null;
+            return runner;
+        }
+
+    }
+
     editAt(idx){
         if (this.isEmpty()){
             console.log("The list is empty.")
@@ -118,14 +157,15 @@ class SLList {
 
     insertAt(value, idx){
         this.length += 1;
-        if (this.isEmpty() || idx === 0 || idx === 1){
-            this.addToBack(value);
-            return this
+        if (this.isEmpty() || idx === 0){
+            this.addToFront(value)
+            return this;
         }
-        let count = 1;
+
+        let count = 0;
         let runner = this.head;
 
-        while (count < idx - 1 && runner.next !== null){
+        while (count < idx -1  && runner.next !== null){
             count += 1;
             runner = runner.next;
         }
@@ -283,23 +323,23 @@ list2.printList() // Output: 10 -> 20 -> 30 -> 40 -> 60 -> 70 -> 80 -> 90
 // list2.hasCycle()
 
 // TEST getLength() method:
-console.log(list2.getLength())
+// console.log(list2.getLength())
 
-// TEST help() method:
+// // TEST help() method:
 list2.help()
 
-// TEST forEach(aFunction) method:
-    // For this example, we will use forEach to generate a frequency table of values in list2
-let hashMap = {}
-const updateMap = element => {
-    if (! hashMap[element.value] ){
-        hashMap[element.value] = 1
-    }
-    else { hashMap[element.value] += 1 }
-}
+// // TEST forEach(aFunction) method:
+//     // For this example, we will use forEach to generate a frequency table of values in list2
+// let hashMap = {}
+// const updateMap = element => {
+//     if (! hashMap[element.value] ){
+//         hashMap[element.value] = 1
+//     }
+//     else { hashMap[element.value] += 1 }
+// }
 
-list2.forEach(updateMap)
+// list2.forEach(updateMap)
 
-for (const entry of Object.entries(hashMap)){
-    console.log(entry[0], entry[1])
-}
+// for (const entry of Object.entries(hashMap)){
+//     console.log(entry[0], entry[1])
+// }
