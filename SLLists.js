@@ -15,6 +15,9 @@
     // j. printList()          -> Returns this, console.logs node.value for all nodes in list
     // k. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
     // l. help()               -> Prints these comments to the console
+// SLList has the following features:
+    // a. console.log(myList)  -> Prints a string [node1.value,node2.value...] representing the values in the list"
+    // b. myList.length        -> Returns the number of elements in instance
 
 // Util allows us to set a custom inspect
 const util = require("util")
@@ -307,9 +310,9 @@ let node2 = myList.getNodeAt(3)
 node2.next = node1
 console.log(myList.hasCycle())
     // Output:     The list has a cycle.
-                // There is a cycle involving the following 1 elements: 10.
-                // The cycle starts at position 2, which has a value of 10
-                // The cycle ends at position 3, which has a value of 100
+                // There is a cycle involving the following 3 elements: 20,211,10.
+                // The cycle starts at index 1, which has a value of 211
+                // The cycle ends at index 3, which has a value of 20
                 // true
 myList.getNodeAt(3).next = null; // Break the cycle
 
