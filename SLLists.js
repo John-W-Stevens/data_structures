@@ -4,18 +4,20 @@
 
 // SLList has the following methods:
     // a. isEmpty()            -> Returns boolean based on whether or not SLList is empty
-    // b. addToBack(value)     -> Returns this, creates a new node and adds to back of list
-    // c. addToFront(value)    -> Returns this, creates a new node and adds to front of list
-    // d. removeFromFront()    -> Removes this.head and returns it's value
-    // e. removeFromBack()     -> Removes the last node in the list and returns it's value
+    // b. push(value)          -> Returns this, creates a new node and adds to back of list
+    // c. pushFront(value)     -> Returns this, creates a new node and adds to front of list
+    // d. pop()                -> Removes the last node in the list and returns it's value
+    // e. popFront()           -> Removes this.head and returns it's value
     // f. removeAt(idx)        -> Returns this, removes node at the specified index position
     // g. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list
-    // h. editAt(idx)          -> Returns the node at the idx position in the list
+    // h. getNodeAt(idx)          -> Returns the node at the idx position in the list
     // i. hasCycle()           -> Returns boolean based on whether or not a cycle exists
     // j. printList()          -> Returns this, console.logs node.value for all nodes in list
     // k. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
-    // l. getLength()          -> Returns the number of elements in instance.
-    // m. help()               -> Prints these comments to the console
+    // l. help()               -> Prints these comments to the console
+
+// Util allows us to set a custom inspect
+const util = require("util")
 
 class SLNode {
     constructor(value){
@@ -29,29 +31,46 @@ class SLList {
         this.head = null;
         this.length = 0;
     }
+    
+    [util.inspect.custom](){
+        if (this.isEmpty()){
+            return "[]"
+        }
+        let runner = this.head;
+        let line = `[${runner.value}`
+        while (runner.next !== null){
+            line += `, ${runner.next.value}`
+            runner = runner.next;
+        }
+        line += "]"
+        return line;
+    }
 
     help(){
         console.log()
         console.log("SLList class has the following methods:")
         console.log("    a. isEmpty()            -> Returns boolean based on whether or not SLList is empty.")
-        console.log("    b. addToBack(value)     -> Returns this, creates a new node and adds to back of list.")
-        console.log("    c. addToFront(value)    -> Returns this, creates a new node and adds to front of list.")
-        console.log("    d. removeFromFront()    -> Removes this.head and returns it's value.")
-        console.log("    e. removeFromBack()     -> Removes the last node in the list and returns it's value.")
+        console.log("    b. push(value)          -> Returns this, creates a new node and adds to back of list.")
+        console.log("    c. pushFront(value)     -> Returns this, creates a new node and adds to front of list.")
+        console.log("    d. pop()                -> Removes the last node in the list and returns it's value.")
+        console.log("    e. popFront()           -> Removes this.head and returns it's value.")
         console.log("    f. removeAt(idx)        -> Returns this, removes node at the specified index position.")
         console.log("    g. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list.")
-        console.log("    h. editAt(idx)          -> Returns the node at the idx position in the list.")
+        console.log("    h. getNodeAt(idx)       -> Returns the node at the idx position in the list.")
         console.log("    i. hasCycle()           -> Returns boolean based on whether or not a cycle exists. Prints cycle length, start index, & end index")
         console.log("    j. printList()          -> Returns this, console.logs node.value for all nodes in list.")
-        console.log("    k. getLength()          -> Returns the number of elements in instance.")
-        console.log("    l. forEach(aFunction)   -> Input is a function, applies input function to each element in instance.")
+        console.log("    k. forEach(aFunction)   -> Input is a function, applies input function to each element in instance.")
+        console.log()
         console.log("NOTE: For the purposes of accessing entries by index position, this class follows standard JavaScript practice and begins indexing at 0.")
+        console.log("SLList class has the following features:")
+        console.log("    1. console.log(myList)  -> Prints a string [node1.value,node2.value...] representing the values in the list")
+        console.log("    2. myList.length        -> Returns the number of nodes in the list")
         console.log()
     }
 
     isEmpty(){ return this.head === null; }
 
-    addToBack(value){
+    push(value){
         let newNode = new SLNode(value);
         this.length += 1;
         if (this.isEmpty()){
@@ -67,7 +86,7 @@ class SLList {
         return this;
     }
 
-    addToFront(value){
+    pushFront(value){
         let newNode = new SLNode(value);
         let currentHead = this.head;
         newNode.next = currentHead;
@@ -76,7 +95,7 @@ class SLList {
         return this
     }
 
-    removeFromFront(){
+    popFront(){
         // Removes the head and returns its value
         if (this.isEmpty()){
             console.log("The list is empty.")
@@ -89,7 +108,7 @@ class SLList {
         return currentHead.value
     }
 
-    removeFromBack(){
+    pop(){
         if (this.isEmpty()){
             console.log("This list is empty.")
             return this;
@@ -113,7 +132,7 @@ class SLList {
             return this;
         }
         else if (idx === 0){
-            return this.removeFromFront();
+            return this.popFront();
 
         }
         else if (this.length - 1 < idx){
@@ -141,14 +160,15 @@ class SLList {
 
     }
 
-    editAt(idx){
+    getNodeAt(idx){
+        // Returns the node at the specified index position
         if (this.isEmpty()){
             console.log("The list is empty.")
             return this;
         }
-        let count = 1;
+        let count = 0;
         let runner = this.head;
-        while (count < idx - 1 && runner.next !== null){
+        while (count < idx && runner.next !== null){
             count += 1;
             runner = runner.next;
         }
@@ -158,7 +178,7 @@ class SLList {
     insertAt(value, idx){
         this.length += 1;
         if (this.isEmpty() || idx === 0){
-            this.addToFront(value)
+            this.pushFront(value)
             return this;
         }
 
@@ -170,7 +190,7 @@ class SLList {
             runner = runner.next;
         }
         if (runner.next === null){
-            this.addToBack(value);
+            this.push(value);
             return this;
         }
         let newNode = new SLNode(value);
@@ -192,11 +212,11 @@ class SLList {
 
         while (slowRunner.next !== null){
             slowRunner = slowRunner.next;
-            fastRunner = fastRunner.next.next;
+            if (fastRunner.next === null || fastRunner.next.next === null){return false}
+            else {fastRunner = fastRunner.next.next}
 
             if (slowRunner === fastRunner){
-                console.log("The list has a cycle.")
-                let cycle = []
+                let cycle = [slowRunner.value]
                 let cycleMap = {}
                 slowRunner = slowRunner.next;
                 while (slowRunner !== fastRunner){
@@ -209,7 +229,7 @@ class SLList {
 
                 // find cycle start
                 let cycleStart = this.head
-                let startIdx = 1;
+                let startIdx = 0;
                 let searching = true
                 while (searching){
                     if (!cycleMap[cycleStart.value]){
@@ -217,7 +237,7 @@ class SLList {
                         startIdx += 1;
                     }
                     else if (cycleStart === cycleMap[cycleStart.value]){
-                        console.log(`The cycle starts at position ${startIdx}, which has a value of ${cycleStart.value}`)
+                        console.log(`The cycle starts at index ${startIdx}, which has a value of ${cycleStart.value}`)
                         searching = false
                     }
                 }
@@ -226,15 +246,15 @@ class SLList {
                 let count = 1
                 let cycleRunner = cycleStart;
                 let endIdx = startIdx;
-                while (count <= cycleLength){
+                while (count < cycleLength){
                     cycleRunner = cycleRunner.next
                     count += 1
                     endIdx += 1
                 }
                 let cycleEnd = cycleRunner
-                console.log(`The cycle ends at position ${endIdx}, which has a value of ${cycleEnd.value}`)
+                console.log(`The cycle ends at index ${endIdx}, which has a value of ${cycleEnd.value}`)
                 
-                console.log(endIdx)
+                // console.log(endIdx)
                 return true
             }
         }
@@ -255,91 +275,45 @@ class SLList {
         return this
     }
 
-    getLength(){
-        return this.length;
-    }
-
-    printList(){
-        if (this.isEmpty()){
-            console.log("List is empty.")
-            return this
-        }
-        let runner = this.head;
-        let line = `${runner.value}`
-        while (runner.next !== null){
-            line += ` -> ${runner.next.value}`
-            runner = runner.next;
-        }
-        console.log(line)
-        return this        
-    }
 }
 
 
-// const list1 = new SLList()
-// list1.addToBack(5)
-// list1.addToBack(6)
-// list1.addToBack(2)
+const myList = new SLList()
 
-// list1.addToBack(10)
+// console.log(myList) // Output: []
+myList.push(211)
+myList.push(333)
+myList.pushFront(10)
+// console.log(myList) // Output: [10, 211, 333]
+myList.pop()
+// console.log(myList) // Output: [10, 211]
+myList.popFront()
+// console.log(myList) // Output: [211]
 
-// list1.printList() // Output: 10 -> 5 -> 6 -> 2
+myList.insertAt(100, 0)
+// console.log(myList) // Output: [100, 211]
 
-// list1.removeFromFront()
-// list1.printList() // Output: 5 -> 6 -> 2
+myList.push(10).push(20).push(30)
+// console.log(myList) // Output: [100, 211, 10, 20, 30]
 
-// list1.removeFromBack()
-// list1.printList() // Output: 5 -> 6
+// myList.removeAt(1)
+console.log(myList) // Output: [100, 10, 20, 30]
 
-// list1.addToBack(10)
-// list1.addToBack(20)
-// list1.addToBack(30)
-// list1.printList() // Output: 5 -> 6 -> 10 -> 20 -> 30
+// console.log(myList.length) // Output: 6
+// console.log(myList.hasCycle()) // Output: false
 
-// list1.insertAt(56, 4)
-// list1.printList() // Output: 5 -> 6 -> 10 -> 56 -> 20 -> 30
+let node1 = myList.getNodeAt(1)
+let node2 = myList.getNodeAt(3)
+node2.next = node1
+console.log(myList.hasCycle())
+    // Output:     The list has a cycle.
+                // There is a cycle involving the following 1 elements: 10.
+                // The cycle starts at position 2, which has a value of 10
+                // The cycle ends at position 3, which has a value of 100
+                // true
+myList.getNodeAt(3).next = null; // Break the cycle
 
-const list2 = new SLList()
+console.log(myList.hasCycle()) // Output: false
+console.log(myList) // Output: [100, 211, 10, 20]
 
-list2.addToBack(10)
-list2.addToBack(20)
-list2.addToBack(30)
-list2.addToBack(40)
-list2.addToBack(60)
-list2.addToBack(70)
-list2.addToBack(80)
-list2.addToBack(90)
 
-list2.printList() // Output: 10 -> 20 -> 30 -> 40 -> 60 -> 70 -> 80 -> 90
-
-// UNCOMMENT THIS BLOCK TO TEST hasCycle() method:
-
-// let x = list2.head.next.next
-// let y = list2.head.next.next.next.next.next.next.next
-
-// y.next = x // This creates a cycle by pointing the last element to the third
-// let idx = list2.hasCycle()
-// list2.editAt(idx).next = null;
-// list2.hasCycle()
-
-// TEST getLength() method:
-// console.log(list2.getLength())
-
-// // TEST help() method:
-list2.help()
-
-// // TEST forEach(aFunction) method:
-//     // For this example, we will use forEach to generate a frequency table of values in list2
-// let hashMap = {}
-// const updateMap = element => {
-//     if (! hashMap[element.value] ){
-//         hashMap[element.value] = 1
-//     }
-//     else { hashMap[element.value] += 1 }
-// }
-
-// list2.forEach(updateMap)
-
-// for (const entry of Object.entries(hashMap)){
-//     console.log(entry[0], entry[1])
-// }
