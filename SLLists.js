@@ -8,12 +8,13 @@
     // c. pushFront(value)     -> Returns this, creates a new node and adds to front of list
     // d. pop()                -> Removes the last node in the list and returns it's value
     // e. popFront()           -> Removes this.head and returns it's value
-    // f. removeAt(idx)        -> Returns this, removes node at the specified index position
-    // g. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list
-    // h. getNodeAt(idx)       -> Returns the node at the idx position in the list
-    // i. hasCycle()           -> Returns boolean based on whether or not a cycle exists
-    // j. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
-    // k. help()               -> Prints these comments to the console
+    // f. includes(value)      -> Returns a boolean based on whether or not the list has a node with the specificed value 
+    // g. removeAt(idx)        -> Returns this, removes node at the specified index position
+    // h. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list
+    // i. getNodeAt(idx)       -> Returns the node at the idx position in the list
+    // j. hasCycle()           -> Returns boolean based on whether or not a cycle exists
+    // k. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
+    // l. help()               -> Prints these comments to the console
 // SLList has the following features:
     // a. console.log(myList)  -> Prints a string [node1.value,node2.value...] representing the values in the list"
     // b. myList.length        -> Returns the number of elements in instance
@@ -56,11 +57,12 @@ class SLList {
         console.log("    c. pushFront(value)     -> Returns this, creates a new node and adds to front of list.")
         console.log("    d. pop()                -> Removes the last node in the list and returns it's value.")
         console.log("    e. popFront()           -> Removes this.head and returns it's value.")
-        console.log("    f. removeAt(idx)        -> Returns this, removes node at the specified index position.")
-        console.log("    g. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list.")
-        console.log("    h. getNodeAt(idx)       -> Returns the node at the idx position in the list.")
-        console.log("    i. hasCycle()           -> Returns boolean based on whether or not a cycle exists. Prints cycle length, start index, & end index")
-        console.log("    j. forEach(aFunction)   -> Input is a function, applies input function to each element in instance.")
+        console.log("    f. includes(value)      -> Returns a boolean based on whether or not the list has a node with the specificed value ")
+        console.log("    g. removeAt(idx)        -> Returns this, removes node at the specified index position.")
+        console.log("    h. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list.")
+        console.log("    i. getNodeAt(idx)       -> Returns the node at the idx position in the list.")
+        console.log("    j. hasCycle()           -> Returns boolean based on whether or not a cycle exists. Prints cycle length, start index, & end index")
+        console.log("    k. forEach(aFunction)   -> Input is a function, applies input function to each element in instance.")
         console.log()
         console.log("NOTE: For the purposes of accessing entries by index position, this class follows standard JavaScript practice and begins indexing at 0.")
         console.log("SLList class has the following features:")
@@ -198,6 +200,18 @@ class SLList {
         newNode.next = runner.next;
         runner.next = newNode;
         return this;
+    }
+
+    includes(value){
+        if (this.isEmpty()){
+            return false;
+        }
+        let runner = this.head;
+        while (runner.value !== value){
+            if (runner.next === null){ return false }
+            runner = runner.next;
+        }
+        return true;
     }
 
     hasCycle(){
