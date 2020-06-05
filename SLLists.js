@@ -9,12 +9,13 @@
     // d. pop()                -> Removes the last node in the list and returns it's value
     // e. popFront()           -> Removes this.head and returns it's value
     // f. includes(value)      -> Returns a boolean based on whether or not the list has a node with the specificed value 
-    // g. removeAt(idx)        -> Returns this, removes node at the specified index position
-    // h. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list
-    // i. getNodeAt(idx)       -> Returns the node at the idx position in the list
-    // j. hasCycle()           -> Returns boolean based on whether or not a cycle exists
-    // k. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
-    // l. help()               -> Prints these comments to the console
+    // g. removeByValue(value) -> Returns the first node with targeted value and removes it from list, returns false if no node exists
+    // h. removeAt(idx)        -> Returns this, removes node at the specified index position
+    // i. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list
+    // j. getNodeAt(idx)       -> Returns the node at the idx position in the list
+    // k. hasCycle()           -> Returns boolean based on whether or not a cycle exists
+    // l. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
+    // m. help()               -> Prints these comments to the console
 // SLList has the following features:
     // a. console.log(myList)  -> Prints a string [node1.value,node2.value...] representing the values in the list"
     // b. myList.length        -> Returns the number of elements in instance
@@ -58,11 +59,12 @@ class SLList {
         console.log("    d. pop()                -> Removes the last node in the list and returns it's value.")
         console.log("    e. popFront()           -> Removes this.head and returns it's value.")
         console.log("    f. includes(value)      -> Returns a boolean based on whether or not the list has a node with the specificed value ")
-        console.log("    g. removeAt(idx)        -> Returns this, removes node at the specified index position.")
-        console.log("    h. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list.")
-        console.log("    i. getNodeAt(idx)       -> Returns the node at the idx position in the list.")
-        console.log("    j. hasCycle()           -> Returns boolean based on whether or not a cycle exists. Prints cycle length, start index, & end index")
-        console.log("    k. forEach(aFunction)   -> Input is a function, applies input function to each element in instance.")
+        console.log("    g. removeByValue(value) -> Returns the first node with targeted value and removes it from list, returns false if no node exists")
+        console.log("    h. removeAt(idx)        -> Returns this, removes node at the specified index position.")
+        console.log("    i. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list.")
+        console.log("    j. getNodeAt(idx)       -> Returns the node at the idx position in the list.")
+        console.log("    k. hasCycle()           -> Returns boolean based on whether or not a cycle exists. Prints cycle length, start index, & end index")
+        console.log("    l. forEach(aFunction)   -> Input is a function, applies input function to each element in instance.")
         console.log()
         console.log("NOTE: For the purposes of accessing entries by index position, this class follows standard JavaScript practice and begins indexing at 0.")
         console.log("SLList class has the following features:")
@@ -126,6 +128,33 @@ class SLList {
             current.next = null;
             this.length -= 1;
             return runner.value;
+        }
+    }
+
+    removeByValue(value){
+        if (this.isEmpty()){
+            console.log("The list is empty.");
+            return this;
+        }
+        let runner = this.head;
+        let current;
+        if (runner.value == value){
+            return this.popFront();
+        }
+        else {
+            while (runner.next !== null){
+                current = runner;
+                runner = runner.next;
+                if (runner.value == value){
+                    break;
+                }
+            }
+            if (runner.next === null && runner.value !== value){
+                return false;
+            }
+            current.next = runner.next;
+            runner.next = null;
+            return runner;
         }
     }
 
@@ -330,4 +359,7 @@ myList.getNodeAt(3).next = null; // Break the cycle
 console.log(myList.hasCycle()) // Output: false
 console.log(myList) // Output: [100, 211, 10, 20]
 
+console.log(myList.forEach( node => {node.value += 2})) // Output: [102, 213, 12, 22]
 
+console.log(myList.removeByValue(102))
+console.log(myList)
