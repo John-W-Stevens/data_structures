@@ -242,6 +242,7 @@ class SLList {
             let newTailIdx = idx - 1;
             let node = this.getNodeAt(newTailIdx);
             node.next = null;
+            this.length = idx;
             return other
         }
         return false;
@@ -438,3 +439,5 @@ console.log(myList)
 let otherList2 = myList.splitOnValue(20);
 console.log(myList) // Output -> [100, 211, 10]
 console.log(otherList2) // Output -> [20, 30, 14, 13, 12]
+console.log(otherList2.length)
+console.log(myList.length)
