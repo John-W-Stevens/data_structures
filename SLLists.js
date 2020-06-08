@@ -217,6 +217,10 @@ class SLList {
     }
 
     secondToLast(){
+        if (this.length < 2){
+            console.log("The list has less than 2 elements.")
+            return false;
+        }
         return this.getNodeAt(this.length - 2);
     }
 
