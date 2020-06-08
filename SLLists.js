@@ -15,6 +15,9 @@
     // j. getNodeAt(idx)       -> Returns the node at the idx position in the list
     // k. hasCycle()           -> Returns boolean based on whether or not a cycle exists
     // l. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
+    // m. secondToLast         -> Returns the value of the node in the second to last position
+    // n. concat               -> Returns this, input is another SLList object, concats both lists together
+    // o. splitOnValue         -> Returns a new SLList object, or false if value doesn't exist, splits current list on value
     // m. help()               -> Prints these comments to the console
 // SLList has the following features:
     // a. console.log(myList)  -> Prints a string [node1.value,node2.value...] representing the values in the list"
@@ -65,6 +68,9 @@ class SLList {
         console.log("    j. getNodeAt(idx)       -> Returns the node at the idx position in the list.")
         console.log("    k. hasCycle()           -> Returns boolean based on whether or not a cycle exists. Prints cycle length, start index, & end index")
         console.log("    l. forEach(aFunction)   -> Input is a function, applies input function to each element in instance.")
+        console.log("    m. secondToLast         -> Returns the value of the node in the second to last position.")
+        console.log("    n. concat               -> Returns this, input is another SLList object, concats both lists together.") 
+        console.log("    o. splitOnValue         -> Returns a new SLList object, or false if value doesn't exist, splits current list on value.")
         console.log()
         console.log("NOTE: For the purposes of accessing entries by index position, this class follows standard JavaScript practice and begins indexing at 0.")
         console.log("SLList class has the following features:")
@@ -139,6 +145,7 @@ class SLList {
         let runner = this.head;
         let current;
         if (runner.value == value){
+            this.length -= 1
             return this.popFront();
         }
         else {
@@ -154,6 +161,7 @@ class SLList {
             }
             current.next = runner.next;
             runner.next = null;
+            this.length -= 1
             return runner;
         }
     }
@@ -164,6 +172,7 @@ class SLList {
             return this;
         }
         else if (idx === 0){
+            this.length -= 1;
             return this.popFront();
 
         }
@@ -207,8 +216,39 @@ class SLList {
         return runner
     }
 
+    secondToLast(){
+        return this.getNodeAt(this.length - 2);
+    }
+
+    concat(other){
+        let otherHead = other.head;
+        this.push(otherHead.value)
+        while (otherHead.next !== null){
+            otherHead = otherHead.next;
+            this.push(otherHead.value);
+        }
+        return this
+    }
+
+    splitOnValue(value){
+
+        let idx = this.includes(value, true)
+
+        if (idx){
+            let other = new SLList();
+            other.head = this.getNodeAt(idx)
+            other.length = this.length - idx;
+
+            let newTailIdx = idx - 1;
+            let node = this.getNodeAt(newTailIdx);
+            node.next = null;
+            return other
+        }
+        return false;
+    }
+
     insertAt(value, idx){
-        this.length += 1;
+        
         if (this.isEmpty() || idx === 0){
             this.pushFront(value)
             return this;
@@ -225,20 +265,26 @@ class SLList {
             this.push(value);
             return this;
         }
+        this.length += 1;
         let newNode = new SLNode(value);
         newNode.next = runner.next;
         runner.next = newNode;
         return this;
     }
 
-    includes(value){
+    includes(value, returnIdx = false){
         if (this.isEmpty()){
             return false;
         }
         let runner = this.head;
+        let count = 0;
         while (runner.value !== value){
             if (runner.next === null){ return false }
             runner = runner.next;
+            count += 1;
+        }
+        if (returnIdx){
+            return count;
         }
         return true;
     }
@@ -326,17 +372,23 @@ const myList = new SLList()
 // console.log(myList) // Output: []
 myList.push(211)
 myList.push(333)
+
 myList.pushFront(10)
+
+
 // console.log(myList) // Output: [10, 211, 333]
 myList.pop()
+
 // console.log(myList) // Output: [10, 211]
 myList.popFront()
+
 // console.log(myList) // Output: [211]
 
 myList.insertAt(100, 0)
 // console.log(myList) // Output: [100, 211]
 
 myList.push(10).push(20).push(30)
+
 // console.log(myList) // Output: [100, 211, 10, 20, 30]
 
 // myList.removeAt(1)
@@ -345,21 +397,44 @@ console.log(myList) // Output: [100, 10, 20, 30]
 // console.log(myList.length) // Output: 6
 // console.log(myList.hasCycle()) // Output: false
 
-let node1 = myList.getNodeAt(1)
-let node2 = myList.getNodeAt(3)
-node2.next = node1
-console.log(myList.hasCycle())
-    // Output:     The list has a cycle.
-                // There is a cycle involving the following 3 elements: 20,211,10.
-                // The cycle starts at index 1, which has a value of 211
-                // The cycle ends at index 3, which has a value of 20
-                // true
-myList.getNodeAt(3).next = null; // Break the cycle
+// let node1 = myList.getNodeAt(1)
+// let node2 = myList.getNodeAt(3)
+// node2.next = node1
+// console.log(myList.hasCycle())
+//     // Output:     The list has a cycle.
+//                 // There is a cycle involving the following 3 elements: 20,211,10.
+//                 // The cycle starts at index 1, which has a value of 211
+//                 // The cycle ends at index 3, which has a value of 20
+//                 // true
+// myList.getNodeAt(3).next = null; // Break the cycle
 
-console.log(myList.hasCycle()) // Output: false
-console.log(myList) // Output: [100, 211, 10, 20]
+// console.log(myList.hasCycle()) // Output: false
+// console.log(myList) // Output: [100, 211, 10, 20]
 
-console.log(myList.forEach( node => {node.value += 2})) // Output: [102, 213, 12, 22]
+// console.log(myList.forEach( node => {node.value += 2})) // Output: [102, 213, 12, 22]
 
-console.log(myList.removeByValue(102))
+// console.log(myList.removeByValue(102))
+// console.log(myList)
+
+// secondToLast(){}
+console.log(myList.length)
+// console.log(myList.secondToLast())
+
+let otherList = new SLList();
+otherList.push(14)
+otherList.push(13)
+otherList.push(12)
+
 console.log(myList)
+// console.log(myList.length)
+console.log(otherList)
+myList.concat(otherList)
+console.log(myList)
+// console.log(myList.length)
+
+// console.log(myList.includes(50))
+// console.log(myList.includes(10, returnIdx=true))
+
+let otherList2 = myList.splitOnValue(20);
+console.log(myList) // Output -> [100, 211, 10]
+console.log(otherList2) // Output -> [20, 30, 14, 13, 12]
