@@ -225,12 +225,11 @@ class SLList {
     }
 
     concat(other){
-        let otherHead = other.head;
-        this.push(otherHead.value)
-        while (otherHead.next !== null){
-            otherHead = otherHead.next;
-            this.push(otherHead.value);
+        if (other.isEmpty()){
+            return this;
         }
+        let tail = this.getNodeAt(this.length -1)
+        tail.next = other.head;
         return this
     }
 
