@@ -1,39 +1,15 @@
-// Overview
-// My implementation of a singly-linked list in JavaScript
-// This file contains two classes (SLNode and SLList)
-
-// SLList has the following methods:
-    // a. isEmpty()            -> Returns boolean based on whether or not SLList is empty
-    // b. push(value)          -> Returns this, creates a new node and adds to back of list
-    // c. pushFront(value)     -> Returns this, creates a new node and adds to front of list
-    // d. pop()                -> Removes the last node in the list and returns it's value
-    // e. popFront()           -> Removes this.head and returns it's value
-    // f. includes(value)      -> Returns a boolean based on whether or not the list has a node with the specificed value 
-    // g. removeByValue(value) -> Returns the first node with targeted value and removes it from list, returns false if no node exists
-    // h. removeAt(idx)        -> Returns this, removes node at the specified index position
-    // i. insertAt(value, idx) -> Returns this, inserts a new node in the idx position in the list
-    // j. getNodeAt(idx)       -> Returns the node at the idx position in the list
-    // k. hasCycle()           -> Returns boolean based on whether or not a cycle exists
-    // l. forEach(aFunction)   -> Returns this, input is a function. Applies function to each element in instance.
-    // m. secondToLast         -> Returns the value of the node in the second to last position
-    // n. concat               -> Returns this, input is another SLList object, concats both lists together
-    // o. splitOnValue         -> Returns a new SLList object, or false if value doesn't exist, splits current list on value
-    // m. help()               -> Prints these comments to the console
-// SLList has the following features:
-    // a. console.log(myList)  -> Prints a string [node1.value,node2.value...] representing the values in the list"
-    // b. myList.length        -> Returns the number of elements in instance
+// Stack implementation built off singly-linked list class:
 
 // Util allows us to set a custom inspect
 const util = require("util")
 
-export class SLNode {
+class SLNode {
     constructor(value){
         this.value = value;
         this.next = null;
     }
 }
-
-export class SLList {
+class SLList {
     constructor(){
         this.head = null;
         this.length = 0;
@@ -370,79 +346,31 @@ export class SLList {
 
 }
 
-
-const myList = new SLList()
-
-// console.log(myList) // Output: []
-myList.push(211)
-myList.push(333)
-
-myList.pushFront(10)
-
-
-// console.log(myList) // Output: [10, 211, 333]
-myList.pop()
-
-// console.log(myList) // Output: [10, 211]
-myList.popFront()
-
-// console.log(myList) // Output: [211]
-
-myList.insertAt(100, 0)
-// console.log(myList) // Output: [100, 211]
-
-myList.push(10).push(20).push(30)
-
-// console.log(myList) // Output: [100, 211, 10, 20, 30]
-
-// myList.removeAt(1)
-console.log(myList) // Output: [100, 10, 20, 30]
-
-// console.log(myList.length) // Output: 6
-// console.log(myList.hasCycle()) // Output: false
-
-// let node1 = myList.getNodeAt(1)
-// let node2 = myList.getNodeAt(3)
-// node2.next = node1
-// console.log(myList.hasCycle())
-//     // Output:     The list has a cycle.
-//                 // There is a cycle involving the following 3 elements: 20,211,10.
-//                 // The cycle starts at index 1, which has a value of 211
-//                 // The cycle ends at index 3, which has a value of 20
-//                 // true
-// myList.getNodeAt(3).next = null; // Break the cycle
-
-// console.log(myList.hasCycle()) // Output: false
-// console.log(myList) // Output: [100, 211, 10, 20]
-
-// console.log(myList.forEach( node => {node.value += 2})) // Output: [102, 213, 12, 22]
-
-// console.log(myList.removeByValue(102))
-// console.log(myList)
-
-// secondToLast(){}
-console.log(myList.length)
-// console.log(myList.secondToLast())
-
-let otherList = new SLList();
-otherList.push(14)
-otherList.push(13)
-otherList.push(12)
-
-console.log(myList)
-// console.log(myList.length)
-console.log(otherList)
-myList.concat(otherList)
-console.log(myList)
-// console.log(myList.length)
-
-// console.log(myList.includes(50))
-// console.log(myList.includes(10, returnIdx=true))
-
-let otherList2 = myList.splitOnValue(20);
-console.log(myList) // Output -> [100, 211, 10]
-console.log(otherList2) // Output -> [20, 30, 14, 13, 12]
-console.log(otherList2.length)
-console.log(myList.length)
+class Stack {
+    constructor(){ 
+        this.data = new SLList(); 
+    }
+    // Methods:
+    push(value){ return this.data.pushFront(value); }
+    pop(){ return this.data.popFront(); }
+    peek(){ return this.data.head }
+    isEmpty(){ return this.data.isEmpty(); }
+    size(){ return this.data.length; }
+}
 
 
+const myStack = new Stack();
+console.log(myStack.isEmpty()) // Output -> true;
+myStack.push(5)
+myStack.push(6)
+myStack.pop()
+console.log(myStack)           // Output -> Stack { data: [5] }
+myStack.push(7)
+myStack.push(100)
+console.log(myStack.peek())    // Output -> SLNode {
+                                            // value: 100,
+                                            // next: SLNode { value: 7, next: SLNode { value: 5, next: null } }
+                                            //   }
+console.log(myStack.isEmpty()) // Output -> false
+console.log(myStack)           // Output -> Stack { data: [100, 7, 5] }
+console.log(myStack.size())    // Output -> 3
