@@ -1,4 +1,5 @@
-// Queue implementation built off singly-linked list class:
+// Queue implementation built off two stack implementations
+// This is sort of a nonsense algorithm
 
 // Util allows us to set a custom inspect
 const util = require("util")
@@ -346,6 +347,18 @@ class SLList {
 
 }
 
+class Stack {
+    constructor(){ 
+        this.data = new SLList(); 
+    }
+    // Methods:
+    push(value){ return this.data.pushFront(value); }
+    pop(){ return this.data.popFront(); }
+    peek(){ return this.data.head }
+    isEmpty(){ return this.data.isEmpty(); }
+    size(){ return this.data.length; }
+}
+
 class Queue {
     constructor(){
         this.data = new SLList();
@@ -357,14 +370,45 @@ class Queue {
     size() { return this.data.length }
 }
 
-const myQueue = new Queue()
+class QueueStack{
+    constructor(){
+        this.stack1 = new Stack()
+        this.stack2 = new Stack()
+    }
+    enqueue(value){
+        this.stack1.push(value)
+    }
 
-console.log(myQueue.isEmpty())
-myQueue.enqueue(5)
-myQueue.enqueue(12)
-myQueue.enqueue(30)
-console.log(myQueue)
+    dequeue(){
+        
+        // Pop elements from stack 1 and load stack 2
+        while (this.stack1.size() > 0){
+            let value = this.stack1.pop()
+            this.stack2.push(value)
+        }
+        // The last element to pop() from stack 2 is the element we want to dequeue
+        let output = this.stack2.pop()
+        
+        // Reload stack 1
+        while (this.stack2.size() > 0){
+            this.stack1.push(this.stack2.pop())
+        }
 
-myQueue.dequeue()
-console.log(myQueue) 
-console.log(myQueue.size())
+        return output
+    }
+}
+
+const QS = new QueueStack();
+
+QS.enqueue(15)
+QS.enqueue(20)
+QS.enqueue(30)
+
+console.log(QS)
+    // stack1: [30, 20, 15]
+    // stack2: []
+console.log(QS.dequeue()) // Output -> 15
+
+console.log(QS)
+    // stack1: [30, 20]
+    // stack2: []
