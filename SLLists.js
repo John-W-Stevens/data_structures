@@ -18,7 +18,8 @@
     // m. secondToLast         -> Returns the value of the node in the second to last position
     // n. concat               -> Returns this, input is another SLList object, concats both lists together
     // o. splitOnValue         -> Returns a new SLList object, or false if value doesn't exist, splits current list on value
-    // m. help()               -> Prints these comments to the console
+    // m. reverse()            -> Returns this, reverses the list
+    // n. help()               -> Prints these comments to the console
 // SLList has the following features:
     // a. console.log(myList)  -> Prints a string [node1.value,node2.value...] representing the values in the list"
     // b. myList.length        -> Returns the number of elements in instance
@@ -26,14 +27,14 @@
 // Util allows us to set a custom inspect
 const util = require("util")
 
-export class SLNode {
+class SLNode {
     constructor(value){
         this.value = value;
         this.next = null;
     }
 }
 
-export class SLList {
+class SLList {
     constructor(){
         this.head = null;
         this.length = 0;
@@ -71,6 +72,7 @@ export class SLList {
         console.log("    m. secondToLast         -> Returns the value of the node in the second to last position.")
         console.log("    n. concat               -> Returns this, input is another SLList object, concats both lists together.") 
         console.log("    o. splitOnValue         -> Returns a new SLList object, or false if value doesn't exist, splits current list on value.")
+        console.log("    p. reverse()            -> Returns this, reverses a singly-linked list")
         console.log()
         console.log("NOTE: For the purposes of accessing entries by index position, this class follows standard JavaScript practice and begins indexing at 0.")
         console.log("SLList class has the following features:")
@@ -276,6 +278,20 @@ export class SLList {
         return this;
     }
 
+    reverse(){
+
+        let previous_node = null;
+        let runner = this.head;
+        while (runner !== null){
+            var next_node = runner.next // the next node is runner.next
+            runner.next = previous_node // point runner.next at the previous node
+            previous_node = runner // the previous node becomes current runner
+            runner = next_node // next runner is next_node
+        }
+        this.head = previous_node // the last node in the list becomes the new head
+        return this
+    }
+
     includes(value, returnIdx = false){
         if (this.isEmpty()){
             return false;
@@ -442,7 +458,8 @@ console.log(myList)
 let otherList2 = myList.splitOnValue(20);
 console.log(myList) // Output -> [100, 211, 10]
 console.log(otherList2) // Output -> [20, 30, 14, 13, 12]
-console.log(otherList2.length)
-console.log(myList.length)
+// console.log(otherList2.length)
+// console.log(myList.length)
 
+console.log(otherList2.reverse())
 

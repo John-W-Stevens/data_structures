@@ -380,20 +380,18 @@ class QueueStack{
     }
 
     dequeue(){
-        
         // Pop elements from stack 1 and load stack 2
         while (this.stack1.size() > 0){
             let value = this.stack1.pop()
             this.stack2.push(value)
         }
-        // The last element to pop() from stack 2 is the element we want to dequeue
+        // The element "on top" of stack 2 is the element we want to dequeue
         let output = this.stack2.pop()
         
         // Reload stack 1
         while (this.stack2.size() > 0){
             this.stack1.push(this.stack2.pop())
         }
-
         return output
     }
 }
