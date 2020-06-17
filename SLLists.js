@@ -18,8 +18,10 @@
     // m. secondToLast         -> Returns the value of the node in the second to last position
     // n. concat               -> Returns this, input is another SLList object, concats both lists together
     // o. splitOnValue         -> Returns a new SLList object, or false if value doesn't exist, splits current list on value
-    // m. reverse()            -> Returns this, reverses the list
-    // n. help()               -> Prints these comments to the console
+    // p. reverse()            -> Returns this, reverses the list
+    // q. removeDuplicates()   -> Returns this, removes all duplicate values from list (ASSUMES LIST IS SORTED)
+    // r. removeNegatives()    -> Returns this, removes all negative values from list
+    // s. help()               -> Prints these comments to the console
 // SLList has the following features:
     // a. console.log(myList)  -> Prints a string [node1.value,node2.value...] representing the values in the list"
     // b. myList.length        -> Returns the number of elements in instance
@@ -278,6 +280,33 @@ class SLList {
         return this;
     }
 
+    removeDuplicates(){
+        if (this.isEmpty()){ return this }
+        if (this.head.next === null){ return this }
+        let walker = this.head;
+        let runner = this.head.next;
+        while (true){
+            while (walker.value == runner.value){
+                walker.next = runner.next;
+                runner = walker.next;
+                if (runner === null){ return this }
+            }
+            walker = walker.next;
+            runner = runner.next;
+            if (walker.next === null){ break }
+        }
+        return this
+    }
+
+    removeNegatives(){
+        this.forEach( n => {
+            if (n.value < 0){
+                this.removeByValue(n.value)
+                this.removeNegatives()
+            }
+        })
+    }
+
     reverse(){
 
         let previous_node = null;
@@ -387,32 +416,32 @@ class SLList {
 }
 
 
-const myList = new SLList()
+// const myList = new SLList()
 
-// console.log(myList) // Output: []
-myList.push(211)
-myList.push(333)
+// // console.log(myList) // Output: []
+// myList.push(211)
+// myList.push(333)
 
-myList.pushFront(10)
+// myList.pushFront(10)
 
 
-// console.log(myList) // Output: [10, 211, 333]
-myList.pop()
+// // console.log(myList) // Output: [10, 211, 333]
+// myList.pop()
 
-// console.log(myList) // Output: [10, 211]
-myList.popFront()
+// // console.log(myList) // Output: [10, 211]
+// myList.popFront()
 
-// console.log(myList) // Output: [211]
+// // console.log(myList) // Output: [211]
 
-myList.insertAt(100, 0)
-// console.log(myList) // Output: [100, 211]
+// myList.insertAt(100, 0)
+// // console.log(myList) // Output: [100, 211]
 
-myList.push(10).push(20).push(30)
+// myList.push(10).push(20).push(30)
 
-// console.log(myList) // Output: [100, 211, 10, 20, 30]
+// // console.log(myList) // Output: [100, 211, 10, 20, 30]
 
-// myList.removeAt(1)
-console.log(myList) // Output: [100, 10, 20, 30]
+// // myList.removeAt(1)
+// console.log(myList) // Output: [100, 10, 20, 30]
 
 // console.log(myList.length) // Output: 6
 // console.log(myList.hasCycle()) // Output: false
@@ -436,30 +465,60 @@ console.log(myList) // Output: [100, 10, 20, 30]
 // console.log(myList.removeByValue(102))
 // console.log(myList)
 
-// secondToLast(){}
-console.log(myList.length)
-// console.log(myList.secondToLast())
+// // secondToLast(){}
+// console.log(myList.length)
+// // console.log(myList.secondToLast())
 
-let otherList = new SLList();
-otherList.push(14)
-otherList.push(13)
-otherList.push(12)
+// let otherList = new SLList();
+// otherList.push(14)
+// otherList.push(13)
+// otherList.push(12)
 
+// console.log(myList)
+// // console.log(myList.length)
+// console.log(otherList)
+// myList.concat(otherList)
+// console.log(myList)
+// // console.log(myList.length)
+
+// // console.log(myList.includes(50))
+// // console.log(myList.includes(10, returnIdx=true))
+
+// let otherList2 = myList.splitOnValue(20);
+// console.log(myList) // Output -> [100, 211, 10]
+// console.log(otherList2) // Output -> [20, 30, 14, 13, 12]
+// // console.log(otherList2.length)
+// // console.log(myList.length)
+
+// console.log(otherList2.reverse())
+
+// const myList = new SLList();
+
+// console.log(myList.push(10).push(16).push(84).push(13).push(56).push(74))
+//     // Output -> [10, 16, 84, 13, 56, 74]
+// console.log(myList.hasCycle()) 
+//     // Output -> false
+
+// // create a cycle
+// node1 = myList.getNodeAt(1)
+// node2 = myList.getNodeAt(4)
+// node2.next = node1
+
+// console.log(myList.hasCycle()) 
+    // Output -> true
+    // There is a cycle involving the following 4 elements: 56,16,84,13.
+    // The cycle starts at index 1, which has a value of 16
+    // The cycle ends at index 4, which has a value of 56
+
+// const myList = new SLList().push(5).push(6).push(6).push(6).push(6).push(6).push(7).push(7)
+// console.log(myList)
+
+// myList.removeDuplicatesFromSortedSLList()
+// console.log(myList)
+
+const myList = new SLList().push(0).push(1).push(-7).push(2).push(-5)
 console.log(myList)
-// console.log(myList.length)
-console.log(otherList)
-myList.concat(otherList)
+
+myList.removeNegatives()
 console.log(myList)
-// console.log(myList.length)
-
-// console.log(myList.includes(50))
-// console.log(myList.includes(10, returnIdx=true))
-
-let otherList2 = myList.splitOnValue(20);
-console.log(myList) // Output -> [100, 211, 10]
-console.log(otherList2) // Output -> [20, 30, 14, 13, 12]
-// console.log(otherList2.length)
-// console.log(myList.length)
-
-console.log(otherList2.reverse())
 
